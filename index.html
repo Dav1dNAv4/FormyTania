@@ -1136,7 +1136,7 @@ body {
 
 /* ── LÓGICA DEL COFRE ── */
 let chestUnlocked = false;
-const correctAnswers = { q1:'b', q2:'b', q3:'c', q4:'b', q5:'c', q6:'c' };
+const correctAnswers = { q1:'b', q2:'b', q3:'c', q4:'b', q5:'c' };
 
 function navigateTo(id) {
   document.querySelectorAll('.section').forEach(s => {
@@ -1161,14 +1161,17 @@ function checkPuzzle() {
   let score = 0;
   for (const [k, v] of data.entries()) { if (v === correctAnswers[k]) score++; }
   const msg = document.getElementById('puzzle-message');
-  if (score === 6) {
+  
+  // Cambiamos a 5 para que coincida con el número de preguntas
+  if (score === 5) { 
     msg.style.color = '#2e8b57';
     msg.innerText = '✦ ¡Cofre abierto! ✦';
     chestUnlocked = true;
     setTimeout(() => navigateTo('section-start'), 1600);
   } else {
     msg.style.color = '#c0134d';
-    msg.innerText = `Acertaste ${score}/6. Vuelve a intentarlo.`;
+    // Actualizamos el texto para que diga /5 en lugar de /6
+    msg.innerText = `Acertaste ${score}/5. Vuelve a intentarlo.`; 
   }
 }
 
