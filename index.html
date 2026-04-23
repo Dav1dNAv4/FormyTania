@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Feliz Día del Libro, Tania</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Special+Elite&display=swap');
+
+:root {
+  --night-bg: #06090f;
+  --chest-wood: #5c2a0a;
+  --chest-dark: #2e1205;
+  --chest-mid: #7a3810;
+  --velvet: #6b0020;
+  --velvet-mid: #8a0028;
+  --velvet-light: #a0002e;
+  --gold: #e8c44a;
+  --gold-dark: #b8941a;
+  --gold-light: #f5d878;
+  --rose: #c0134d;
+  --text-dark: #1a0a05;
+  --cream: #fdf6e3;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  background: var(--night-bg);
+  color: #f0e8d8;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ─── CIELO ESTRELLADO ─── */
+#sky {
+  position: fixed; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse at 20% 30%, #0d1a2e 0%, #06090f 60%);
+  overflow: hidden;
+}
+
+.stars {
+  position: absolute; inset: 0;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: white;
+  animation: twinkle var(--dur, 3s) ease-in-out infinite alternate;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes twinkle {
+  0%   { opacity: var(--min-op, 0.2); transform: scale(1); }
+  100% { opacity: var(--max-op, 1);   transform: scale(1.4); }
+}
+
+.nebula {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.moon {
+  position: absolute;
+  top: 6%; right: 8%;
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fffef0, #f0e89a 40%, #d4c860);
+  box-shadow: 0 0 25px 8px rgba(240,232,154,0.3), 0 0 60px 20px rgba(240,232,154,0.1);
+  z-index: 2;
+}
+
+/* ─── SECCIONES ─── */
+.section {
+  display: none;
+  position: absolute; inset: 0;
+  justify-content: center; align-items: center;
+  flex-direction: column; text-align: center;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+  z-index: 10;
+}
+.section.active { display: flex; opacity: 1; }
+
+/* ─── SECCIÓN INICIO ─── */
+#section-start { z-index: 10; }
+
+.welcome-text {
+  font-family: 'Century Gothic', CenturyGothic, AppleGothic, 'Trebuchet MS', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1.85;
+  color: #e8dcc8;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.9);
+  max-width: 300px;
+  margin-bottom: 36px;
+  letter-spacing: 0.04em;
+}
+
+/* ─── COFRE 3D ─── */
+.chest-scene {
+  perspective: 600px;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.chest-3d {
+  position: relative;
+  width: 180px;
+  height: 130px;
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
+}
+
+.chest-scene:hover .chest-3d {
+  transform: rotateX(-8deg) rotateY(5deg) scale(1.05);
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)) drop-shadow(0 0 20px rgba(232,196,74,0.3));
+}
+
+/* SVG del cofre principal */
+.chest-svg-main { width: 180px; }
+
+/* Partículas de brillo al hover */
+.chest-scene:hover .spark { opacity: 1; animation: sparkle 1s ease-out forwards; }
+.spark {
+  position: absolute; width: 4px; height: 4px;
+  border-radius: 50%; background: var(--gold-light);
+  opacity: 0; pointer-events: none;
+}
+.spark:nth-child(1) { top: 20%; left: 30%; animation-delay: 0s; }
+.spark:nth-child(2) { top: 10%; left: 60%; animation-delay: 0.15s; }
+.spark:nth-child(3) { top: 30%; left: 80%; animation-delay: 0.3s; }
+.spark:nth-child(4) { top: 5%;  left: 45%; animation-delay: 0.1s; }
+
+@keyframes sparkle {
+  0%   { transform: translate(0,0) scale(0); opacity: 1; }
+  100% { transform: translate(var(--tx,10px), var(--ty,-20px)) scale(1.5); opacity: 0; }
+}
+.spark:nth-child(1) { --tx: -15px; --ty: -25px; }
+.spark:nth-child(2) { --tx: 10px;  --ty: -30px; }
+.spark:nth-child(3) { --tx: 20px;  --ty: -20px; }
+.spark:nth-child(4) { --tx: 5px;   --ty: -35px; }
+
+.tap-hint {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  color: rgba(232,196,74,0.5);
+  text-transform: uppercase;
+  animation: pulse-hint 2s ease-in-out infinite;
+}
+@keyframes pulse-hint { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+/* ─── PUZZLE ─── */
+#section-puzzle { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+.puzzle-container {
+  width: 92%; max-width: 420px;
+  background: var(--cream);
+  padding: 28px 24px; border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  color: var(--text-dark);
+  position: relative; z-index: 10;
+  border: 2px solid rgba(232,196,74,0.3);
+  margin: auto;
+}
+
+.puzzle-container h2 {
+  font-family: 'Playfair Display', serif;
+  color: var(--rose); margin-bottom: 16px;
+  font-size: 1.4rem;
+}
+
+.question { margin-bottom: 14px; }
+.question p { font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; }
+.options label {
+  display: block; background: #f5eee0; padding: 10px 14px;
+  margin-bottom: 5px; border-radius: 8px; cursor: pointer;
+  border: 1.5px solid transparent; transition: all 0.2s;
+  font-size: 0.88rem;
+}
+.options label:hover { border-color: var(--rose); background: #fde8ee; }
+.options input { margin-right: 8px; }
+
+.btn-submit {
+  background: linear-gradient(135deg, var(--rose), #8b0030);
+  color: white; border: none; padding: 14px;
+  border-radius: 25px; font-weight: bold; width: 100%;
+  font-family: 'Playfair Display', serif; font-size: 1rem;
+  cursor: pointer; letter-spacing: 0.05em;
+  box-shadow: 0 4px 20px rgba(192,19,77,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-submit:active { transform: scale(0.97); }
+
+/* ─── INTERIOR DEL COFRE ─── */
+#section-treasure {
+  background:
+    repeating-linear-gradient(135deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 2px, transparent 2px, transparent 14px),
+    linear-gradient(160deg, #3d1a05 0%, #1e0a02 100%);
+}
+
+.chest-interior {
+  width: 96%; max-width: 420px;
+  height: 82vh;
+  background:
+    radial-gradient(ellipse at 50% 30%, #a0002e 0%, #6b0020 40%, #3a0010 100%);
+  border-radius: 16px;
+  border: 3px solid #3d1c00;
+  box-shadow:
+    inset 0 0 80px rgba(0,0,0,0.7),
+    inset 0 0 30px rgba(106,0,30,0.3),
+    0 0 40px rgba(0,0,0,0.9);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Textura de terciopelo */
+.chest-interior::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.04) 0px, transparent 1px, transparent 3px);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+/* Reflejo interior */
+.chest-interior::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%; height: 40%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 100%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Sobre animado */
+.envelope-wrapper {
+  position: absolute; z-index: 20; cursor: pointer;
+  transition: all 1.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+.envelope-wrapper.open {
+  transform: translateY(120vh) rotate(15deg) scale(0.5);
+  opacity: 0; pointer-events: none;
+}
+
+.envelope {
+  width: 90px; height: 62px;
+  background: linear-gradient(145deg, #fdf6e3, #f5e8c8);
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  position: relative;
+  border: 1.5px solid rgba(184,148,26,0.5);
+}
+.envelope::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 50%, rgba(240,220,180,0.4) 50%);
+  border-radius: 4px;
+}
+.envelope::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 50%;
+  border-bottom: 31px solid #e8d4a0;
+  border-left: 45px solid transparent;
+  border-right: 45px solid transparent;
+}
+.wax-seal {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px; height: 28px;
+  background: radial-gradient(circle at 40% 35%, #c0134d, #7a0020);
+  border-radius: 50%; z-index: 5;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif;
+  color: #ffd700; font-size: 0.85rem; font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.2);
+  border: 1px solid rgba(232,196,74,0.4);
+}
+
+/* ─── GRID DE REGALOS ─── */
+.gifts-grid {
+  display: flex; gap: 32px; z-index: 5;
+  flex-wrap: wrap; justify-content: center; align-items: center;
+  padding: 20px;
+}
+
+.gift-item {
+  text-decoration: none; color: white; cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  position: relative;
+}
+.gift-item:hover { transform: translateY(-6px) scale(1.08); }
+
+.icon-wrapper { width: 96px; height: 96px; position: relative; }
+.gift-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,220,180,0.7);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* ─── LIBRO ─── */
+.book-svg { width: 96px; height: 96px; filter: drop-shadow(0 6px 16px rgba(0,0,0,0.7)); }
+
+/* ─── TULIPANES ─── */
+.tulip-mini-svg {
+  width: 96px; height: 96px;
+  filter: drop-shadow(0 4px 12px rgba(255,100,150,0.4));
+  animation: sway 4s ease-in-out infinite alternate;
+  transform-origin: bottom center;
+}
+@keyframes sway {
+  0%   { transform: rotate(-2deg); }
+  100% { transform: rotate(2deg); }
+}
+
+/* ─── TICKET ─── */
+.ticket-svg { width: 96px; height: 96px; filter: drop-shadow(0 4px 16px rgba(0,0,0,0.6)); }
+
+/* ─── MODAL FLORES ─── */
+#flower-modal {
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at center bottom, #0d1a0a 0%, #050b04 100%);
+  z-index: 100; display: none; justify-content: center; align-items: center;
+  opacity: 0; transition: opacity 0.6s ease;
+  flex-direction: column;
+}
+#flower-modal.active { display: flex; opacity: 1; }
+
+.bouquet-wrapper {
+  width: 88vw; max-width: 340px;
+  height: 70vh;
+  cursor: pointer;
+  position: relative;
+  display: flex; justify-content: center; align-items: flex-end;
+}
+
+.bouquet-svg {
+  width: 100%; height: 100%;
+  animation: bouquet-breathe 3s ease-in-out infinite alternate;
+  filter: drop-shadow(0 -10px 30px rgba(255,120,170,0.2));
+}
+@keyframes bouquet-breathe {
+  0%   { transform: scale(0.97) translateY(3px); }
+  100% { transform: scale(1.03) translateY(-3px); }
+}
+
+.flower-tap-hint {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,200,220,0.45);
+  margin-top: 16px;
+  animation: pulse-hint 2s ease-in-out infinite;
+}
+
+/* ─── MODAL CARTA ─── */
+#letter-modal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.88); z-index: 50;
+  display: none; justify-content: center; align-items: center;
+  opacity: 0; transition: opacity 0.4s;
+  padding: 24px;
+}
+#letter-modal.active { display: flex; opacity: 1; }
+
+/* ─── MODAL POEMA ─── */
+#poem-modal {
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at center, #0d0815 0%, #050508 100%);
+  z-index: 110; display: none; justify-content: center; align-items: center;
+  opacity: 0; transition: opacity 0.6s ease;
+  padding: 24px;
+}
+#poem-modal.active { display: flex; opacity: 1; }
+
+.modal-content {
+  background: var(--cream);
+  color: var(--text-dark);
+  width: 100%; max-width: 380px;
+  padding: 32px 28px;
+  border-radius: 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem; line-height: 1.75;
+  max-height: 88vh; overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.9);
+  border: 1px solid rgba(184,148,26,0.25);
+}
+
+.modal-title {
+  font-family: 'Playfair Display', serif;
+  color: var(--rose); font-size: 1.4rem;
+  text-align: center; margin-bottom: 20px;
+}
+
+.poem-content {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 1.05rem; line-height: 2;
+  text-align: center; color: #2a150a;
+}
+
+.poem-author {
+  text-align: right; font-style: italic; color: #888;
+  margin-top: 20px; font-size: 0.85rem;
+}
+
+.btn-close {
+  background: linear-gradient(135deg, #5c2a0a, #3d1c00);
+  color: #f5d878; border: none; padding: 14px;
+  margin-top: 22px; border-radius: 8px;
+  font-family: 'Playfair Display', serif;
+  font-weight: bold; width: 100%; cursor: pointer;
+  font-size: 0.95rem; letter-spacing: 0.08em;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  transition: transform 0.2s;
+}
+.btn-close:active { transform: scale(0.97); }
+
+/* ─── MODAL FINAL ─── */
+#final-modal {
+  position: fixed; inset: 0; z-index: 200;
+  background: radial-gradient(ellipse at center, #1a0530 0%, #05020d 100%);
+  display: none; justify-content: center; align-items: center;
+  opacity: 0; transition: opacity 0.8s ease;
+  padding: 28px;
+}
+#final-modal.active { display: flex; opacity: 1; }
+
+.final-content {
+  width: 100%; max-width: 380px;
+  text-align: center;
+  animation: final-rise 1s ease forwards;
+}
+@keyframes final-rise {
+  from { transform: translateY(30px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.final-stars {
+  font-size: 1rem; letter-spacing: 0.5em;
+  color: var(--gold); margin-bottom: 20px;
+  animation: shimmer-gold 2s ease-in-out infinite alternate;
+}
+@keyframes shimmer-gold {
+  0%   { color: #c8a020; text-shadow: none; }
+  100% { color: #f5d878; text-shadow: 0 0 12px rgba(245,216,120,0.6); }
+}
+
+.final-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; font-style: italic;
+  color: #f0d8ff;
+  text-shadow: 0 0 30px rgba(200,100,255,0.4);
+  margin-bottom: 28px;
+  letter-spacing: 0.05em;
+}
+
+.final-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; line-height: 1.85;
+  color: #e0d0f0;
+  margin-bottom: 28px;
+}
+
+.final-signature {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 1.1rem;
+  color: #f8c0e0;
+  text-shadow: 0 0 15px rgba(248,180,220,0.4);
+  margin-bottom: 32px;
+  line-height: 1.7;
+}
+
+.btn-final-close {
+  background: linear-gradient(135deg, #6b0020, #3a000e);
+  color: #f5d878; border: 1px solid rgba(245,216,120,0.3);
+  padding: 16px 32px; border-radius: 30px;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem; letter-spacing: 0.1em;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(107,0,32,0.5), 0 0 50px rgba(107,0,32,0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-final-close:active { transform: scale(0.96); }
+
+/* Decoración de hoja para carta */
+.leaf-dec {
+  text-align: center; font-size: 1.4rem; margin-bottom: 8px; opacity: 0.5;
+}
+</style>
+</head>
+<body>
+
+<!-- ─── CIELO ─── -->
+<div id="sky">
+  <div class="moon"></div>
+  <div class="nebula" style="width:400px;height:300px;background:#1a3a6a;top:10%;left:5%;"></div>
+  <div class="nebula" style="width:300px;height:200px;background:#3a1a5a;top:50%;left:60%;"></div>
+  <div class="stars" id="stars-container"></div>
+</div>
+
+<!-- ─── 1. INICIO ─── -->
+<div id="section-start" class="section active">
+  <div class="welcome-text">
+    Hoy es un día especial<br>y algo especial ha llegado para ti<br>con mucho cariño.
+  </div>
+  <div class="chest-scene" onclick="tryOpenChest()">
+    <div class="chest-3d">
+      <!-- Destellos -->
+      <div class="spark"></div>
+      <div class="spark"></div>
+      <div class="spark"></div>
+      <div class="spark"></div>
+      <!-- Cofre SVG mejorado con tapa, cuerpo, bisagras, herrajes y candado -->
+      <svg class="chest-svg-main" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="wood-lid" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#a04515"/>
+            <stop offset="40%" stop-color="#7a3010"/>
+            <stop offset="100%" stop-color="#4a1a06"/>
+          </linearGradient>
+          <linearGradient id="wood-body" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#8b3810"/>
+            <stop offset="50%" stop-color="#6a280a"/>
+            <stop offset="100%" stop-color="#3d1500"/>
+          </linearGradient>
+          <linearGradient id="wood-side" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#3a1204"/>
+            <stop offset="100%" stop-color="#6a280a"/>
+          </linearGradient>
+          <linearGradient id="gold-band" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#f5d878"/>
+            <stop offset="50%" stop-color="#c8a020"/>
+            <stop offset="100%" stop-color="#f0cc60"/>
+          </linearGradient>
+          <linearGradient id="lock-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#f5d878"/>
+            <stop offset="100%" stop-color="#b8941a"/>
+          </linearGradient>
+          <filter id="shadow-drop">
+            <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="rgba(0,0,0,0.7)"/>
+          </filter>
+          <!-- Veta de madera -->
+          <pattern id="wood-grain" x="0" y="0" width="20" height="60" patternUnits="userSpaceOnUse">
+            <path d="M0,10 Q10,8 20,12" stroke="rgba(0,0,0,0.08)" stroke-width="1" fill="none"/>
+            <path d="M0,25 Q8,22 20,28" stroke="rgba(0,0,0,0.06)" stroke-width="1" fill="none"/>
+            <path d="M0,42 Q12,39 20,44" stroke="rgba(0,0,0,0.07)" stroke-width="1" fill="none"/>
+          </pattern>
+          <radialGradient id="gold-rivet" cx="50%" cy="35%" r="50%">
+            <stop offset="0%" stop-color="#fff0a0"/>
+            <stop offset="60%" stop-color="#d4a020"/>
+            <stop offset="100%" stop-color="#8b6010"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Sombra del cofre -->
+        <ellipse cx="100" cy="156" rx="75" ry="8" fill="rgba(0,0,0,0.5)"/>
+
+        <!-- ── CUERPO ── -->
+        <rect x="18" y="88" width="164" height="62" rx="3" fill="url(#wood-body)"/>
+        <rect x="18" y="88" width="164" height="62" rx="3" fill="url(#wood-grain)" opacity="0.5"/>
+        <!-- Frente del cuerpo: brillo superior -->
+        <rect x="18" y="88" width="164" height="10" rx="3" fill="rgba(255,255,255,0.06)"/>
+
+        <!-- ── PERSPECTIVA LATERAL DERECHA ── -->
+        <polygon points="182,88 196,80 196,142 182,150" fill="url(#wood-side)"/>
+        <!-- Veta lateral -->
+        <polygon points="182,88 196,80 196,142 182,150" fill="url(#wood-grain)" opacity="0.3"/>
+
+        <!-- ── TAPA ── -->
+        <path d="M18,88 Q18,52 100,48 Q182,52 182,88 Z" fill="url(#wood-lid)"/>
+        <path d="M18,88 Q18,52 100,48 Q182,52 182,88 Z" fill="url(#wood-grain)" opacity="0.4"/>
+        <!-- Tapa: frente superior con reflejo -->
+        <path d="M25,82 Q100,50 175,82 Q100,56 25,82 Z" fill="rgba(255,255,255,0.07)"/>
+        <!-- Perspectiva tapa lateral -->
+        <path d="M182,88 Q182,52 196,46 L196,80 Z" fill="#3a1204"/>
+
+        <!-- ── HERRAJES / FLEJES DORADOS ── -->
+        <!-- Fleje cuerpo izquierdo -->
+        <rect x="42" y="88" width="8" height="62" fill="url(#gold-band)"/>
+        <rect x="42" y="88" width="8" height="62" fill="rgba(255,255,255,0.08)"/>
+        <!-- Fleje cuerpo derecho -->
+        <rect x="150" y="88" width="8" height="62" fill="url(#gold-band)"/>
+        <rect x="150" y="88" width="8" height="62" fill="rgba(255,255,255,0.08)"/>
+        <!-- Fleje tapa izquierdo -->
+        <path d="M42,88 Q42,62 46,54 Q50,62 50,88 Z" fill="url(#gold-band)"/>
+        <!-- Fleje tapa derecho -->
+        <path d="M150,88 Q150,62 154,54 Q158,62 158,88 Z" fill="url(#gold-band)"/>
+        <!-- Fleje horizontal cuerpo -->
+        <rect x="18" y="108" width="164" height="7" fill="url(#gold-band)"/>
+        <rect x="18" y="108" width="164" height="2" fill="rgba(255,255,255,0.2)"/>
+        <!-- Fleje horizontal lateral -->
+        <polygon points="182,108 196,100 196,107 182,115" fill="#c8a020"/>
+
+        <!-- ── BISAGRAS ── -->
+        <!-- Bisagra izquierda -->
+        <rect x="38" y="84" width="14" height="10" rx="2" fill="url(#gold-band)"/>
+        <circle cx="45" cy="89" r="2.5" fill="url(#gold-rivet)"/>
+        <!-- Bisagra derecha -->
+        <rect x="148" y="84" width="14" height="10" rx="2" fill="url(#gold-band)"/>
+        <circle cx="155" cy="89" r="2.5" fill="url(#gold-rivet)"/>
+
+        <!-- ── REMACHES EN ESQUINAS ── -->
+        <circle cx="26" cy="96"  r="4" fill="url(#gold-rivet)"/>
+        <circle cx="26" cy="142" r="4" fill="url(#gold-rivet)"/>
+        <circle cx="174" cy="96"  r="4" fill="url(#gold-rivet)"/>
+        <circle cx="174" cy="142" r="4" fill="url(#gold-rivet)"/>
+        <!-- Remaches fleje h -->
+        <circle cx="46"  cy="112" r="3" fill="url(#gold-rivet)"/>
+        <circle cx="154" cy="112" r="3" fill="url(#gold-rivet)"/>
+
+        <!-- ── BASE DEL COFRE ── -->
+        <rect x="14" y="148" width="170" height="8" rx="3" fill="#2a1000"/>
+        <rect x="14" y="148" width="170" height="3" fill="rgba(255,255,255,0.04)"/>
+        <!-- Patitas -->
+        <rect x="22" y="150" width="12" height="6" rx="2" fill="#4a2000"/>
+        <rect x="166" y="150" width="12" height="6" rx="2" fill="#4a2000"/>
+
+        <!-- ── CANDADO ── -->
+        <!-- Sombra candado -->
+        <ellipse cx="100" cy="108" rx="14" ry="4" fill="rgba(0,0,0,0.3)"/>
+        <!-- Cuerpo candado -->
+        <rect x="86" y="95" width="28" height="22" rx="4" fill="url(#lock-grad)"/>
+        <rect x="86" y="95" width="28" height="8" rx="4" fill="rgba(255,255,255,0.15)"/>
+        <!-- Arco -->
+        <path d="M92,95 Q92,80 100,80 Q108,80 108,95" fill="none" stroke="url(#gold-band)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M92,95 Q92,80 100,80 Q108,80 108,95" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-linecap="round"/>
+        <!-- Ojo cerradura -->
+        <circle cx="100" cy="104" r="4" fill="#5c3a00"/>
+        <circle cx="100" cy="104" r="2.5" fill="#2a1a00"/>
+        <rect x="98.5" y="106" width="3" height="5" rx="1" fill="#2a1a00"/>
+        <!-- Brillo candado -->
+        <ellipse cx="95" cy="98" rx="3" ry="2" fill="rgba(255,255,255,0.25)" transform="rotate(-20,95,98)"/>
+      </svg>
+    </div>
+  </div>
+  <div class="tap-hint">✦ toca para abrir ✦</div>
+</div>
+
+<!-- ─── 2. PUZZLE ─── -->
+<div id="section-puzzle" class="section">
+  <div class="puzzle-container">
+    <h2>El Guardián del Cofre</h2>
+    <form id="quiz-form">
+      <div class="question"><p>1. ¿Quién escribió 'La Ilíada'?</p>
+        <div class="options"><label><input type="radio" name="q1" value="b"> Homero</label><label><input type="radio" name="q1" value="a"> Sófocles</label></div>
+      </div>
+      <div class="question"><p>2. ¿Castigo de Sísifo?</p>
+        <div class="options"><label><input type="radio" name="q2" value="b"> Empujar la piedra</label><label><input type="radio" name="q2" value="c"> Ser devorado</label></div>
+      </div>
+      <div class="question"><p>3. Maestro de Alejandro Magno:</p>
+        <div class="options"><label><input type="radio" name="q3" value="c"> Aristóteles</label><label><input type="radio" name="q3" value="a"> Platón</label></div>
+      </div>
+      <div class="question"><p>4. ¿Quién es el dios del mar en la mitología griega?</p>
+        <div class="options"><label><input type="radio" name="q4" value="b"> Poseidón</label><label><input type="radio" name="q4" value="a"> Hades</label></div>
+      </div>
+      <div class="question"><p>5. ¿Qué hilo salvó a Teseo en el laberinto?</p>
+        <div class="options"><label><input type="radio" name="q5" value="c"> El de Ariadna</label><label><input type="radio" name="q5" value="b"> El de Penélope</label></div>
+      </div>
+      <div class="question"><p>6. ¿Qué salió de la caja de Pandora al final?</p>
+        <div class="options"><label><input type="radio" name="q6" value="c"> La Esperanza</label><label><input type="radio" name="q6" value="b"> La Sabiduría</label></div>
+      </div>
+      <button type="button" class="btn-submit" onclick="checkPuzzle()">✦ Girar la llave ✦</button>
+    </form>
+    <div id="puzzle-message" style="margin-top:14px;font-weight:bold;text-align:center;font-size:0.95rem;"></div>
+  </div>
+</div>
+
+<!-- ─── 3. INTERIOR DEL COFRE ─── -->
+<div id="section-treasure" class="section">
+  <div class="chest-interior">
+
+    <!-- Sobre/carta -->
+    <div class="envelope-wrapper" id="main-envelope" onclick="openLetter()">
+      <div class="envelope"><div class="wax-seal">T</div></div>
+    </div>
+
+    <!-- Regalos -->
+    <div class="gifts-grid">
+
+      <!-- 1. LIBRO -->
+      <a href="libro.pdf" download="Libro_Para_Tania.pdf" class="gift-item" onclick="markSeen('libro')">
+        <div class="icon-wrapper">
+          <svg class="book-svg" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="cover-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1a0a40"/>
+                <stop offset="100%" stop-color="#0d0528"/>
+              </linearGradient>
+              <linearGradient id="page-edge" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f5e8c0"/>
+                <stop offset="100%" stop-color="#e0d090"/>
+              </linearGradient>
+              <linearGradient id="spine-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#100630"/>
+                <stop offset="100%" stop-color="#1a0a40"/>
+              </linearGradient>
+              <radialGradient id="star-glow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fff8c0"/>
+                <stop offset="100%" stop-color="rgba(255,248,192,0)"/>
+              </radialGradient>
+            </defs>
+            <!-- Sombra -->
+            <ellipse cx="55" cy="106" rx="35" ry="5" fill="rgba(0,0,0,0.5)"/>
+            <!-- Cantos de páginas (perspectiva) -->
+            <rect x="68" y="8" width="14" height="90" rx="1" fill="url(#page-edge)"/>
+            <!-- Líneas de página -->
+            <line x1="69" y1="14" x2="82" y2="14" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>
+            <line x1="69" y1="20" x2="82" y2="20" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>
+            <line x1="69" y1="26" x2="82" y2="26" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>
+            <line x1="69" y1="32" x2="82" y2="32" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>
+            <line x1="69" y1="38" x2="82" y2="38" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>
+            <line x1="69" y1="44" x2="82" y2="44" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>
+            <line x1="69" y1="50" x2="82" y2="50" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>
+            <line x1="69" y1="56" x2="82" y2="56" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>
+            <line x1="69" y1="62" x2="82" y2="62" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>
+            <line x1="69" y1="68" x2="82" y2="68" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>
+            <line x1="69" y1="74" x2="82" y2="74" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>
+            <line x1="69" y1="80" x2="82" y2="80" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>
+            <line x1="69" y1="86" x2="82" y2="86" stroke="rgba(0,0,0,0.1)" stroke-width="0.8"/>
+            <!-- Portada principal -->
+            <rect x="12" y="4" width="60" height="94" rx="2" fill="url(#cover-grad)"/>
+            <!-- Borde dorado portada -->
+            <rect x="12" y="4" width="60" height="94" rx="2" fill="none" stroke="#c8a020" stroke-width="1.5"/>
+            <!-- Marco interior dorado -->
+            <rect x="16" y="8" width="52" height="86" rx="1" fill="none" stroke="rgba(200,160,32,0.4)" stroke-width="0.8"/>
+            <!-- Lomo -->
+            <rect x="8" y="4" width="6" height="94" rx="1" fill="url(#spine-grad)"/>
+            <rect x="8" y="4" width="6" height="94" rx="1" fill="none" stroke="#a08010" stroke-width="0.8"/>
+            <!-- Decoración portada: estrella dorada central -->
+            <circle cx="42" cy="42" r="18" fill="rgba(200,160,32,0.08)"/>
+            <polygon points="42,24 45,36 58,36 48,44 52,56 42,48 32,56 36,44 26,36 39,36" fill="#e8c44a" opacity="0.9"/>
+            <polygon points="42,24 45,36 58,36 48,44 52,56 42,48 32,56 36,44 26,36 39,36" fill="none" stroke="#fff0a0" stroke-width="0.5"/>
+            <!-- Brillo estrella -->
+            <circle cx="42" cy="38" r="5" fill="url(#star-glow)"/>
+            <!-- Título simulado -->
+            <rect x="22" y="62" width="40" height="3" rx="1" fill="rgba(200,160,32,0.6)"/>
+            <rect x="28" y="68" width="28" height="2.5" rx="1" fill="rgba(200,160,32,0.35)"/>
+            <rect x="32" y="73" width="20" height="2" rx="1" fill="rgba(200,160,32,0.25)"/>
+            <!-- Línea decorativa inferior -->
+            <path d="M20,82 Q42,78 64,82" stroke="rgba(200,160,32,0.4)" stroke-width="1" fill="none"/>
+            <!-- Brillo portada superior -->
+            <rect x="14" y="6" width="56" height="12" rx="1" fill="rgba(255,255,255,0.05)"/>
+          </svg>
+        </div>
+        <div class="gift-label">Libro</div>
+      </a>
+
+      <!-- 2. TULIPANES -->
+      <div class="gift-item" onclick="markSeen('flores'); expandFlowers()">
+        <div class="icon-wrapper">
+          <svg class="tulip-mini-svg" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="tulip1-mini" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ff6090"/>
+                <stop offset="100%" stop-color="#cc1050"/>
+              </linearGradient>
+              <linearGradient id="tulip2-mini" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#e060f0"/>
+                <stop offset="100%" stop-color="#9010b0"/>
+              </linearGradient>
+              <linearGradient id="tulip3-mini" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ff9030"/>
+                <stop offset="100%" stop-color="#cc5000"/>
+              </linearGradient>
+            </defs>
+            <!-- Tallos -->
+            <path d="M30,95 C28,80 26,70 28,55" stroke="#2e7d32" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M50,98 L50,60" stroke="#388e3c" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M70,95 C72,80 74,70 72,55" stroke="#2e7d32" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <!-- Hojas -->
+            <path d="M50,80 C44,72 36,72 34,78" stroke="#2e7d32" stroke-width="1.5" fill="#4caf50" opacity="0.85"/>
+            <path d="M50,75 C56,67 64,67 66,73" stroke="#388e3c" stroke-width="1.5" fill="#66bb6a" opacity="0.85"/>
+            <!-- Tulipán izquierdo (rosa) -->
+            <path d="M28,55 C20,50 18,38 22,30 C26,28 30,32 30,38 C32,30 36,26 38,28 C42,32 40,46 34,52 Z" fill="url(#tulip1-mini)"/>
+            <path d="M29,55 C25,48 28,38 30,36" stroke="rgba(255,255,255,0.25)" stroke-width="1" fill="none"/>
+            <!-- Tulipán central (lila) -->
+            <path d="M50,60 C40,55 38,40 42,30 C46,27 50,32 50,40 C50,32 54,27 58,30 C62,40 60,55 50,60 Z" fill="url(#tulip2-mini)"/>
+            <path d="M51,60 C46,52 49,40 50,37" stroke="rgba(255,255,255,0.25)" stroke-width="1" fill="none"/>
+            <!-- Tulipán derecho (naranja) -->
+            <path d="M72,55 C66,50 64,38 66,30 C70,28 74,32 72,38 C74,30 78,26 80,28 C84,32 82,46 76,52 Z" fill="url(#tulip3-mini)"/>
+            <path d="M73,55 C69,48 72,38 72,36" stroke="rgba(255,255,255,0.25)" stroke-width="1" fill="none"/>
+            <!-- Base / tallos reunidos -->
+            <path d="M28,95 Q50,100 72,95" stroke="#1b5e20" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <div class="gift-label">Flores</div>
+      </div>
+
+      <!-- 3. TICKET -->
+      <a href="ticket.png" download="Ticket_Tania.png" class="gift-item" onclick="markSeen('ticket')">
+        <div class="icon-wrapper">
+          <svg class="ticket-svg" viewBox="0 0 110 80" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="ticket-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fff9e0"/>
+                <stop offset="100%" stop-color="#f5e898"/>
+              </linearGradient>
+              <linearGradient id="ticket-stub" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffe066"/>
+                <stop offset="100%" stop-color="#e8c020"/>
+              </linearGradient>
+              <pattern id="perf" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+                <circle cx="3" cy="3" r="2" fill="var(--velvet)"/>
+              </pattern>
+            </defs>
+            <!-- Sombra -->
+            <ellipse cx="56" cy="77" rx="46" ry="5" fill="rgba(0,0,0,0.35)"/>
+            <!-- Cuerpo principal -->
+            <rect x="4" y="8" width="74" height="60" rx="4" fill="url(#ticket-bg)"/>
+            <!-- Borde superior rojo -->
+            <rect x="4" y="8" width="74" height="8" rx="4" fill="#c0134d"/>
+            <rect x="4" y="12" width="74" height="4" fill="#c0134d"/>
+            <!-- Stub derecho -->
+            <rect x="78" y="8" width="28" height="60" rx="4" fill="url(#ticket-stub)"/>
+            <!-- Perforación (línea punteada) -->
+            <line x1="78" y1="8" x2="78" y2="68" stroke="var(--velvet)" stroke-width="1.5" stroke-dasharray="3,4"/>
+            <!-- Semicírculos de perforación -->
+            <path d="M78,22 Q72,22 72,28 Q72,34 78,34" fill="url(#ticket-bg)"/>
+            <path d="M78,44 Q72,44 72,50 Q72,56 78,56" fill="url(#ticket-bg)"/>
+            <!-- Texto ticket -->
+            <text x="41" y="26" text-anchor="middle" font-family="'Special Elite', 'Courier New', monospace" font-size="7" fill="#c0134d" font-weight="bold" letter-spacing="2">CINEMA</text>
+            <text x="41" y="36" text-anchor="middle" font-family="'Special Elite', 'Courier New', monospace" font-size="5.5" fill="#5c2a0a" letter-spacing="1">PRESENTA</text>
+            <!-- Línea separadora decorativa -->
+            <line x1="12" y1="40" x2="70" y2="40" stroke="rgba(92,42,10,0.2)" stroke-width="0.8" stroke-dasharray="3,2"/>
+            <!-- Nombre de película -->
+            <text x="41" y="51" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="7.5" fill="#2a1000" font-style="italic">Una Sorpresa</text>
+            <text x="41" y="61" text-anchor="middle" font-family="'Special Elite', 'Courier New', monospace" font-size="5" fill="#5c2a0a" letter-spacing="1">PARA TANIA</text>
+            <!-- Stub: texto vertical -->
+            <text x="92" y="44" text-anchor="middle" font-family="'Special Elite', 'Courier New', monospace" font-size="5" fill="#5c2a0a" letter-spacing="1" transform="rotate(90,92,44)">ADMIT ONE</text>
+            <!-- Estrellas decorativas -->
+            <text x="14" y="35" font-size="7" fill="#c0134d" opacity="0.6">★</text>
+            <text x="62" y="35" font-size="7" fill="#c0134d" opacity="0.6">★</text>
+            <!-- Número ticket -->
+            <text x="41" y="6" text-anchor="middle" font-family="monospace" font-size="4" fill="rgba(200,160,32,0)" opacity="0">N°0423</text>
+            <!-- Código de barras simulado en stub -->
+            <rect x="82" y="18" width="2" height="20" fill="rgba(92,42,10,0.5)"/>
+            <rect x="85" y="18" width="1" height="20" fill="rgba(92,42,10,0.5)"/>
+            <rect x="87" y="18" width="3" height="20" fill="rgba(92,42,10,0.5)"/>
+            <rect x="91" y="18" width="1" height="20" fill="rgba(92,42,10,0.5)"/>
+            <rect x="93" y="18" width="2" height="20" fill="rgba(92,42,10,0.5)"/>
+            <rect x="96" y="18" width="3" height="20" fill="rgba(92,42,10,0.5)"/>
+          </svg>
+        </div>
+        <div class="gift-label">Ticket</div>
+      </a>
+
+    </div><!-- /gifts-grid -->
+  </div>
+</div>
+
+<!-- ─── MODAL RAMO DE TULIPANES ─── -->
+<div id="flower-modal" onclick="showPoem()">
+  <div class="bouquet-wrapper">
+    <svg class="bouquet-svg" viewBox="0 0 280 340" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="t1" x1="30%" y1="0%" x2="70%" y2="100%">
+          <stop offset="0%" stop-color="#ff7eb3"/>
+          <stop offset="50%" stop-color="#e8205a"/>
+          <stop offset="100%" stop-color="#a0082e"/>
+        </linearGradient>
+        <linearGradient id="t2" x1="30%" y1="0%" x2="70%" y2="100%">
+          <stop offset="0%" stop-color="#e080ff"/>
+          <stop offset="50%" stop-color="#b020d8"/>
+          <stop offset="100%" stop-color="#6b008a"/>
+        </linearGradient>
+        <linearGradient id="t3" x1="30%" y1="0%" x2="70%" y2="100%">
+          <stop offset="0%" stop-color="#ffb040"/>
+          <stop offset="50%" stop-color="#e06000"/>
+          <stop offset="100%" stop-color="#903000"/>
+        </linearGradient>
+        <linearGradient id="t4" x1="30%" y1="0%" x2="70%" y2="100%">
+          <stop offset="0%" stop-color="#ff9090"/>
+          <stop offset="50%" stop-color="#d83060"/>
+          <stop offset="100%" stop-color="#880028"/>
+        </linearGradient>
+        <linearGradient id="t5" x1="30%" y1="0%" x2="70%" y2="100%">
+          <stop offset="0%" stop-color="#c0f060"/>
+          <stop offset="50%" stop-color="#68b800"/>
+          <stop offset="100%" stop-color="#357000"/>
+        </linearGradient>
+        <linearGradient id="stem-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#1b5e20"/>
+          <stop offset="50%" stop-color="#388e3c"/>
+          <stop offset="100%" stop-color="#1b5e20"/>
+        </linearGradient>
+        <linearGradient id="ribbon" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#ff80a0"/>
+          <stop offset="100%" stop-color="#c01040"/>
+        </linearGradient>
+        <filter id="glow-pink">
+          <feGaussianBlur stdDeviation="4" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="leaf-shadow">
+          <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="rgba(0,60,0,0.4)"/>
+        </filter>
+      </defs>
+
+      <!-- ── TALLOS ── -->
+      <!-- Tallo 1 (izq extremo) -->
+      <path d="M90,310 C88,280 82,240 78,185" stroke="url(#stem-grad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <!-- Tallo 2 (izq centro) -->
+      <path d="M118,312 C116,282 112,250 108,195" stroke="url(#stem-grad)" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+      <!-- Tallo 3 (centro) -->
+      <path d="M140,315 L140,195" stroke="url(#stem-grad)" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <!-- Tallo 4 (der centro) -->
+      <path d="M162,312 C164,282 168,250 172,195" stroke="url(#stem-grad)" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+      <!-- Tallo 5 (der extremo) -->
+      <path d="M190,310 C192,280 198,240 202,185" stroke="url(#stem-grad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+      <!-- ── HOJAS ── -->
+      <path d="M90,275 C75,255 60,250 58,262 C70,268 82,268 90,275 Z" fill="#4caf50" filter="url(#leaf-shadow)"/>
+      <path d="M108,260 C95,238 80,235 80,248 C92,252 102,252 108,260 Z" fill="#66bb6a" filter="url(#leaf-shadow)"/>
+      <path d="M140,270 C128,248 118,248 120,260 C128,263 135,262 140,270 Z" fill="#388e3c" filter="url(#leaf-shadow)"/>
+      <path d="M140,255 C152,233 162,233 160,245 C152,248 145,247 140,255 Z" fill="#4caf50" filter="url(#leaf-shadow)"/>
+      <path d="M172,260 C185,238 200,235 200,248 C188,252 178,252 172,260 Z" fill="#66bb6a" filter="url(#leaf-shadow)"/>
+      <path d="M190,275 C205,255 220,250 222,262 C210,268 198,268 190,275 Z" fill="#4caf50" filter="url(#leaf-shadow)"/>
+
+      <!-- ── TULIPÁN 1 (izq extremo, rosa) ── -->
+      <g transform="translate(78, 185)">
+        <!-- Sépalo izquierdo -->
+        <path d="M0,40 C-10,25 -10,8 -4,0 C-2,8 0,20 4,25 Z" fill="#2e7d32"/>
+        <!-- Sépalo derecho -->
+        <path d="M0,40 C10,25 10,8 4,0 C2,8 0,20 -4,25 Z" fill="#388e3c"/>
+        <!-- Pétalo izquierdo exterior -->
+        <path d="M0,38 C-18,28 -22,8 -16,-12 C-10,-22 -4,-20 0,-8 Z" fill="url(#t1)" filter="url(#glow-pink)"/>
+        <!-- Pétalo izquierdo interior -->
+        <path d="M0,36 C-12,24 -14,6 -10,-10 C-6,-18 -2,-14 0,-4 Z" fill="#ff9ab8"/>
+        <!-- Pétalo derecho exterior -->
+        <path d="M0,38 C18,28 22,8 16,-12 C10,-22 4,-20 0,-8 Z" fill="url(#t1)" filter="url(#glow-pink)"/>
+        <!-- Pétalo derecho interior -->
+        <path d="M0,36 C12,24 14,6 10,-10 C6,-18 2,-14 0,-4 Z" fill="#ff9ab8"/>
+        <!-- Pétalo central -->
+        <path d="M0,36 C-6,20 -6,2 0,-14 C6,2 6,20 0,36 Z" fill="#ffb0cc"/>
+        <!-- Brillo -->
+        <ellipse cx="-5" cy="5" rx="4" ry="10" fill="rgba(255,255,255,0.25)" transform="rotate(-15,-5,5)"/>
+      </g>
+
+      <!-- ── TULIPÁN 2 (izq centro, lila) ── -->
+      <g transform="translate(108, 195)">
+        <path d="M0,42 C-10,27 -10,8 -4,0 C-2,8 0,22 4,26 Z" fill="#1b5e20"/>
+        <path d="M0,42 C10,27 10,8 4,0 C2,8 0,22 -4,26 Z" fill="#2e7d32"/>
+        <path d="M0,40 C-20,28 -24,4 -16,-16 C-10,-28 -4,-24 0,-10 Z" fill="url(#t2)" filter="url(#glow-pink)"/>
+        <path d="M0,38 C-14,24 -16,2 -10,-14 C-6,-22 -2,-18 0,-6 Z" fill="#d080f0"/>
+        <path d="M0,40 C20,28 24,4 16,-16 C10,-28 4,-24 0,-10 Z" fill="url(#t2)" filter="url(#glow-pink)"/>
+        <path d="M0,38 C14,24 16,2 10,-14 C6,-22 2,-18 0,-6 Z" fill="#d080f0"/>
+        <path d="M0,38 C-6,20 -6,0 0,-18 C6,0 6,20 0,38 Z" fill="#e0a0ff"/>
+        <ellipse cx="-6" cy="4" rx="4" ry="12" fill="rgba(255,255,255,0.2)" transform="rotate(-15,-6,4)"/>
+      </g>
+
+      <!-- ── TULIPÁN 3 (centro, naranja) ── -->
+      <g transform="translate(140, 190)">
+        <path d="M0,45 C-12,30 -12,8 -5,0 C-2,8 0,24 5,28 Z" fill="#1b5e20"/>
+        <path d="M0,45 C12,30 12,8 5,0 C2,8 0,24 -5,28 Z" fill="#2e7d32"/>
+        <path d="M0,42 C-22,30 -26,4 -18,-18 C-12,-30 -4,-26 0,-12 Z" fill="url(#t3)" filter="url(#glow-pink)"/>
+        <path d="M0,40 C-16,26 -18,2 -12,-16 C-8,-24 -2,-20 0,-8 Z" fill="#ffcc70"/>
+        <path d="M0,42 C22,30 26,4 18,-18 C12,-30 4,-26 0,-12 Z" fill="url(#t3)" filter="url(#glow-pink)"/>
+        <path d="M0,40 C16,26 18,2 12,-16 C8,-24 2,-20 0,-8 Z" fill="#ffcc70"/>
+        <path d="M0,40 C-7,22 -7,-2 0,-20 C7,-2 7,22 0,40 Z" fill="#ffe090"/>
+        <ellipse cx="-7" cy="5" rx="5" ry="13" fill="rgba(255,255,255,0.25)" transform="rotate(-15,-7,5)"/>
+      </g>
+
+      <!-- ── TULIPÁN 4 (der centro, rojo-rosa) ── -->
+      <g transform="translate(172, 195)">
+        <path d="M0,42 C-10,27 -10,8 -4,0 C-2,8 0,22 4,26 Z" fill="#1b5e20"/>
+        <path d="M0,42 C10,27 10,8 4,0 C2,8 0,22 -4,26 Z" fill="#2e7d32"/>
+        <path d="M0,40 C-20,28 -24,4 -16,-16 C-10,-28 -4,-24 0,-10 Z" fill="url(#t4)" filter="url(#glow-pink)"/>
+        <path d="M0,38 C-14,24 -16,2 -10,-14 C-6,-22 -2,-18 0,-6 Z" fill="#ffb0b0"/>
+        <path d="M0,40 C20,28 24,4 16,-16 C10,-28 4,-24 0,-10 Z" fill="url(#t4)" filter="url(#glow-pink)"/>
+        <path d="M0,38 C14,24 16,2 10,-14 C6,-22 2,-18 0,-6 Z" fill="#ffb0b0"/>
+        <path d="M0,38 C-6,20 -6,0 0,-18 C6,0 6,20 0,38 Z" fill="#ffd0d0"/>
+        <ellipse cx="-6" cy="4" rx="4" ry="12" fill="rgba(255,255,255,0.2)" transform="rotate(-15,-6,4)"/>
+      </g>
+
+      <!-- ── TULIPÁN 5 (der extremo, verde-amarillo) ── -->
+      <g transform="translate(202, 185)">
+        <path d="M0,40 C-10,25 -10,8 -4,0 C-2,8 0,20 4,25 Z" fill="#1b5e20"/>
+        <path d="M0,40 C10,25 10,8 4,0 C2,8 0,20 -4,25 Z" fill="#2e7d32"/>
+        <path d="M0,38 C-18,28 -22,8 -16,-12 C-10,-22 -4,-20 0,-8 Z" fill="url(#t5)" filter="url(#glow-pink)"/>
+        <path d="M0,36 C-12,24 -14,6 -10,-10 C-6,-18 -2,-14 0,-4 Z" fill="#d0f880"/>
+        <path d="M0,38 C18,28 22,8 16,-12 C10,-22 4,-20 0,-8 Z" fill="url(#t5)" filter="url(#glow-pink)"/>
+        <path d="M0,36 C12,24 14,6 10,-10 C6,-18 2,-14 0,-4 Z" fill="#d0f880"/>
+        <path d="M0,36 C-6,20 -6,2 0,-14 C6,2 6,20 0,36 Z" fill="#e8ff90"/>
+        <ellipse cx="-5" cy="5" rx="4" ry="10" fill="rgba(255,255,255,0.2)" transform="rotate(-15,-5,5)"/>
+      </g>
+
+      <!-- ── LAZO ── -->
+      <!-- Lazo izquierdo -->
+      <path d="M140,315 C120,295 100,300 108,310 C116,318 134,312 140,315 Z" fill="url(#ribbon)"/>
+      <!-- Lazo derecho -->
+      <path d="M140,315 C160,295 180,300 172,310 C164,318 146,312 140,315 Z" fill="url(#ribbon)"/>
+      <!-- Nudo central -->
+      <circle cx="140" cy="314" r="7" fill="#e8304e"/>
+      <circle cx="140" cy="314" r="4" fill="#ff6080"/>
+      <!-- Cintas colgantes -->
+      <path d="M135,320 C130,330 125,340 130,345" stroke="url(#ribbon)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M145,320 C150,330 155,340 150,345" stroke="url(#ribbon)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- Unión tallos / base ramo -->
+      <ellipse cx="140" cy="310" rx="55" ry="8" fill="rgba(27,94,32,0.3)"/>
+    </svg>
+  </div>
+  <div class="flower-tap-hint">✦ toca para ver el mensaje ✦</div>
+</div>
+
+<!-- ─── MODAL CARTA ─── -->
+<div id="letter-modal">
+  <div class="modal-content">
+    <div class="leaf-dec">🌹</div>
+    <div class="modal-title">Para Tania,</div>
+    <p>¡Feliz Día del Libro!</p>
+    <br>
+    <p>Hola, mi princesa preciosa.</p>
+    <br>
+    <p>No sé si sepas qué día es hoy, pero es el Día del Libro, así que deseaba darte un regalo especial.</p>
+    <br>
+    <p>Esta no es toda la sorpresa, ya que hay una segunda parte, pero la tendrás que recibir cuando vuelvas.</p>
+    <br>
+    <p>Espero que te guste mucho esto que he preparado para ti.</p>
+    <br>
+    <p>Te adoro, mi princesa preciosa.</p>
+    <br>
+    <p style="text-align:right; font-style:italic; color:#8b4513;">Con todo mi cariño,<br><strong>David.</strong></p>
+    <button class="btn-close" onclick="closeLetter()">Ver los regalos ✦</button>
+  </div>
+</div>
+
+<!-- ─── MODAL MENSAJE FINAL ─── -->
+<div id="final-modal">
+  <div class="final-content">
+    <div class="final-stars">✦ ✦ ✦</div>
+    <div class="final-title">Para ti, Tania</div>
+    <div class="final-body">
+      <p>Espero que te haya gustado esta pequeña web que te hice y que el libro sea de tu agrado.</p>
+      <br>
+      <p>Averigüé un poquito y siento que este te será muy interesante.</p>
+      <p>¡Feliz Día del Libro, mi princesa preciosa!</p>
+      <p>Y recuerda guardar tu ticket, ¡que te tengo algo esperando aquí en Perú!</p>
+      <br>
+      <p>Gracias por existir y por dejarme quererte.</p>
+    </div>
+    <div class="final-signature">Con todo mi amor,<br><strong>David ♡</strong></div>
+    <button class="btn-final-close" onclick="closeFinal()">✦ Cerrar el cofre ✦</button>
+  </div>
+</div>
+
+<!-- ─── MODAL POEMA ─── -->
+<div id="poem-modal">
+  <div class="modal-content" style="background: #0d0815; color: #f0e0f8; border: 1px solid rgba(200,80,255,0.2);">
+    <div class="modal-title" style="color: #e080ff; font-style: italic;">Táctica y Estrategia</div>
+    <div class="poem-content" style="color: #f0d8ff; line-height: 2.1;">
+      <p>Mi táctica es mirarte,</p>
+      <p>aprender cómo sos,</p>
+      <p>quererte como sos.</p>
+      <br>
+      <p>Mi táctica es hablarte</p>
+      <p>y escucharte,</p>
+      <p>construir con palabras</p>
+      <p>un puente indestructible.</p>
+      <br>
+      <p>Mi táctica es</p>
+      <p>quedarme en tu recuerdo</p>
+      <p>no sé cómo ni con qué pretexto,</p>
+      <p>pero quedarme en vos.</p>
+      <br>
+      <p>Mi estrategia es</p>
+      <p>en cambio más profunda y más simple.</p>
+      <br>
+      <p>Mi estrategia es</p>
+      <p>que un día cualquiera,</p>
+      <p>no sé cómo ni con qué pretexto,</p>
+      <p>por fin me necesites.</p>
+    </div>
+    <p class="poem-author" style="color: rgba(200,160,255,0.6);">— Mario Benedetti</p>
+    <button class="btn-close" onclick="closePoem()" style="background: linear-gradient(135deg,#3a0060,#1a0030); color:#e0b0ff; box-shadow:0 4px 15px rgba(150,0,255,0.3);">Volver al cofre ✦</button>
+  </div>
+</div>
+
+<script>
+/* ── GENERADOR DE ESTRELLAS ── */
+(function generateStars() {
+  const container = document.getElementById('stars-container');
+  const count = 280;
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement('div');
+    s.classList.add('star');
+    const size = Math.random() * 2.5 + 0.5;
+    const x = Math.random() * 100;
+    const y = Math.random() * 100;
+    const dur = (Math.random() * 4 + 1.5).toFixed(1);
+    const delay = (Math.random() * 6).toFixed(1);
+    const minOp = (Math.random() * 0.15 + 0.05).toFixed(2);
+    const maxOp = (Math.random() * 0.5 + 0.5).toFixed(2);
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${x}vw; top:${y}vh;
+      --dur:${dur}s; --delay:${delay}s;
+      --min-op:${minOp}; --max-op:${maxOp};
+      animation-delay:${delay}s;
+    `;
+    container.appendChild(s);
+  }
+  /* Estrellas más brillantes */
+  for (let i = 0; i < 18; i++) {
+    const s = document.createElement('div');
+    s.classList.add('star');
+    const size = Math.random() * 2 + 3;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}vw; top:${Math.random()*100}vh;
+      --dur:${(Math.random()*3+2).toFixed(1)}s;
+      --delay:${(Math.random()*5).toFixed(1)}s;
+      --min-op:0.4; --max-op:1;
+      animation-delay:${(Math.random()*5).toFixed(1)}s;
+      box-shadow: 0 0 ${Math.round(size*2)}px ${Math.round(size)}px rgba(255,255,255,0.4);
+    `;
+    container.appendChild(s);
+  }
+})();
+
+/* ── LÓGICA DEL COFRE ── */
+let chestUnlocked = false;
+const correctAnswers = { q1:'b', q2:'b', q3:'c', q4:'b', q5:'c', q6:'c' };
+
+function navigateTo(id) {
+  document.querySelectorAll('.section').forEach(s => {
+    s.classList.remove('active');
+    s.style.display = 'none';
+  });
+  const el = document.getElementById(id);
+  el.style.display = 'flex';
+  // Force reflow so the opacity transition fires
+  void el.offsetWidth;
+  el.classList.add('active');
+  document.getElementById('sky').style.opacity = (id === 'section-start') ? '1' : '0.3';
+}
+
+function tryOpenChest() {
+  navigateTo(chestUnlocked ? 'section-treasure' : 'section-puzzle');
+}
+
+function checkPuzzle() {
+  const form = document.getElementById('quiz-form');
+  const data = new FormData(form);
+  let score = 0;
+  for (const [k, v] of data.entries()) { if (v === correctAnswers[k]) score++; }
+  const msg = document.getElementById('puzzle-message');
+  if (score === 6) {
+    msg.style.color = '#2e8b57';
+    msg.innerText = '✦ ¡Cofre abierto! ✦';
+    chestUnlocked = true;
+    setTimeout(() => navigateTo('section-start'), 1600);
+  } else {
+    msg.style.color = '#c0134d';
+    msg.innerText = `Acertaste ${score}/6. Vuelve a intentarlo.`;
+  }
+}
+
+function openLetter() {
+  const m = document.getElementById('letter-modal');
+  m.style.display = 'flex';
+  setTimeout(() => m.classList.add('active'), 10);
+}
+function closeLetter() {
+  const m = document.getElementById('letter-modal');
+  m.classList.remove('active');
+  setTimeout(() => { m.style.display = 'none'; }, 400);
+  document.getElementById('main-envelope').classList.add('open');
+}
+
+/* ── FLORES ── */
+function expandFlowers() {
+  document.querySelector('.gifts-grid').style.display = 'none';
+  const modal = document.getElementById('flower-modal');
+  modal.style.display = 'flex';
+  setTimeout(() => modal.classList.add('active'), 10);
+}
+
+function showPoem() {
+  const fm = document.getElementById('flower-modal');
+  fm.classList.remove('active');
+  setTimeout(() => { fm.style.display = 'none'; }, 500);
+  const pm = document.getElementById('poem-modal');
+  pm.style.display = 'flex';
+  setTimeout(() => pm.classList.add('active'), 10);
+}
+
+function closePoem() {
+  const pm = document.getElementById('poem-modal');
+  pm.classList.remove('active');
+  setTimeout(() => {
+    pm.style.display = 'none';
+    document.querySelector('.gifts-grid').style.display = 'flex';
+    seen.flores = true;
+    checkAllSeen();
+  }, 400);
+}
+
+/* ── TRACKING DE ÍTEMS ── */
+const seen = { libro: false, flores: false, ticket: false };
+
+function markSeen(item) {
+  seen[item] = true;
+  setTimeout(checkAllSeen, 900);
+}
+
+function checkAllSeen() {
+  if (seen.libro && seen.flores && seen.ticket) {
+    setTimeout(openFinal, 500);
+  }
+}
+
+function openFinal() {
+  const m = document.getElementById('final-modal');
+  m.style.display = 'flex';
+  void m.offsetWidth;
+  m.classList.add('active');
+}
+
+function closeFinal() {
+  const m = document.getElementById('final-modal');
+  m.classList.remove('active');
+  setTimeout(() => { m.style.display = 'none'; }, 600);
+}
+</script>
+
+<!-- ─── MODAL MENSAJE FINAL ─── -->
+<div id="final-modal" style="position:fixed;inset:0;z-index:200;display:none;justify-content:center;align-items:center;padding:24px;background:radial-gradient(ellipse at center,#1a0830 0%,#06030f 100%);opacity:0;transition:opacity 0.8s ease;">
+  <div style="width:100%;max-width:380px;background:linear-gradient(160deg,#fdf6e3 0%,#fce8d0 100%);border-radius:16px;padding:36px 28px 28px;box-shadow:0 0 60px rgba(200,80,160,0.25),0 30px 80px rgba(0,0,0,0.9);border:1.5px solid rgba(192,19,77,0.2);text-align:center;color:#2a1000;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;animation:final-appear 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards;">
+    <div style="font-size:1rem;letter-spacing:0.5em;color:#c0134d;opacity:0.5;margin-bottom:12px;">✦ ✦ ✦</div>
+    <div style="font-family:'Playfair Display',serif;font-size:1.7rem;font-style:italic;color:#c0134d;margin-bottom:20px;line-height:1.2;">Para ti, Tania</div>
+    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1rem;line-height:1.85;color:#3a1a08;">
+      <div style="color:rgba(192,19,77,0.3);font-size:0.9rem;letter-spacing:0.3em;margin-bottom:18px;">— ✦ —</div>
+      <p style="margin-bottom:12px;">Cada regalo en este cofre fue pensado con cuidado, porque tú mereces cosas tan especiales como eres.</p>
+      <p style="margin-bottom:12px;">Un libro, porque sé lo mucho que amas las historias.</p>
+      <p style="margin-bottom:12px;">Unas flores, porque cada vez que te veo florezco yo también.</p>
+      <p style="margin-bottom:20px;">Un ticket al cine, porque quiero seguir viviendo aventuras contigo.</p>
+      <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:1.05rem;color:#8b0030;margin-bottom:16px;">Feliz Día del Libro, mi amor.<br>Hoy y siempre.</p>
+      <p style="font-size:0.95rem;color:#5c2a0a;">Con todo mi corazón,<br><strong>David</strong> 🌷</p>
+    </div>
+    <button onclick="closeFinal()" style="background:linear-gradient(135deg,#c0134d,#7a0028);color:#fdf6e3;border:none;padding:14px 20px;margin-top:24px;border-radius:25px;font-family:'Playfair Display',serif;font-weight:bold;width:100%;cursor:pointer;font-size:0.95rem;letter-spacing:0.1em;box-shadow:0 4px 20px rgba(192,19,77,0.4);">✦ Cerrar el cofre ✦</button>
+  </div>
+</div>
+
+<style>
+#final-modal.active { display: flex !important; opacity: 1 !important; }
+@keyframes final-appear {
+  0%   { transform: scale(0.85) translateY(20px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+</style>
+</body>
+</html>
